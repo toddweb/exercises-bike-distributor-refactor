@@ -1,8 +1,0 @@
-C:\Source\TrainerRoad\BikeDistributorRefactor\BikeDistributor.Test\bin\Debug\BikeDistributor.Test.dll
-C:\Source\TrainerRoad\BikeDistributorRefactor\BikeDistributor.Test\bin\Debug\BikeDistributor.Test.pdb
-C:\Source\TrainerRoad\BikeDistributorRefactor\BikeDistributor.Test\bin\Debug\BikeDistributor.dll
-C:\Source\TrainerRoad\BikeDistributorRefactor\BikeDistributor.Test\bin\Debug\Microsoft.VisualStudio.QualityTools.UnitTestFramework.dll
-C:\Source\TrainerRoad\BikeDistributorRefactor\BikeDistributor.Test\bin\Debug\BikeDistributor.pdb
-C:\Source\TrainerRoad\BikeDistributorRefactor\BikeDistributor.Test\obj\Debug\BikeDistributor.Test.csprojResolveAssemblyReference.cache
-C:\Source\TrainerRoad\BikeDistributorRefactor\BikeDistributor.Test\obj\Debug\BikeDistributor.Test.dll
-C:\Source\TrainerRoad\BikeDistributorRefactor\BikeDistributor.Test\obj\Debug\BikeDistributor.Test.pdb

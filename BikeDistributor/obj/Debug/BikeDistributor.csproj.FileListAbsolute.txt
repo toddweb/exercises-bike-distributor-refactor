@@ -1,4 +1,0 @@
-C:\Source\TrainerRoad\BikeDistributorRefactor\BikeDistributor\bin\Debug\BikeDistributor.dll
-C:\Source\TrainerRoad\BikeDistributorRefactor\BikeDistributor\bin\Debug\BikeDistributor.pdb
-C:\Source\TrainerRoad\BikeDistributorRefactor\BikeDistributor\obj\Debug\BikeDistributor.dll
-C:\Source\TrainerRoad\BikeDistributorRefactor\BikeDistributor\obj\Debug\BikeDistributor.pdb
