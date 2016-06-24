@@ -1,6 +1,4 @@
-Thanks for taking the time to download this refactoring exercise. 
-
-Here's the instructions from our CTO:
+# Bike Distributor Refactoring Exercise
 
 This solution contains three classes used by an imaginary bicycle distributor to produce order receipts and some unit tests to prove that everything works.
 
