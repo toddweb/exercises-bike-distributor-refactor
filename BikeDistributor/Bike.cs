@@ -14,7 +14,9 @@
         }
 
         public string Brand { get; private set; }
+
         public string Model { get; private set; }
-        public int Price { get; set; }
+
+		public int Price { get; private set; }
     }
 }

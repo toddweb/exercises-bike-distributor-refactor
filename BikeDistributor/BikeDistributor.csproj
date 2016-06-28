@@ -39,11 +39,18 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="Promotions\LineDiscount.cs" />
+    <Compile Include="Promotions\Discount.cs" />
+    <Compile Include="Promotions\IDiscountableItem.cs" />
     <Compile Include="Order.cs" />
     <Compile Include="Bike.cs" />
+    <Compile Include="Promotions\OrderDiscount.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="Line.cs" />
+    <Compile Include="ReceiptFormats.cs" />
+    <Compile Include="ReceiptGenerator.cs" />
   </ItemGroup>
+  <ItemGroup />
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
        Other similar extension points exist, see Microsoft.Common.targets.

@@ -1,86 +1,136 @@
-﻿using Microsoft.VisualStudio.TestTools.UnitTesting;
+﻿using BikeDistributor.Discounts;
+using Microsoft.VisualStudio.TestTools.UnitTesting;
+using System;
+using System.Linq;
 
 namespace BikeDistributor.Test
 {
     [TestClass]
     public class OrderTest
-    {
-        private readonly static Bike Defy = new Bike("Giant", "Defy 1", Bike.OneThousand);
-        private readonly static Bike Elite = new Bike("Specialized", "Venge Elite", Bike.TwoThousand);
-        private readonly static Bike DuraAce = new Bike("Specialized", "S-Works Venge Dura-Ace", Bike.FiveThousand);
+	{
+		[TestMethod]
+		public void GivenAnEmptyOrder_WhenCalculateTotal_ThenShouldBeZero()
+		{
+			var sut = new Order(string.Empty);
 
-        [TestMethod]
-        public void ReceiptOneDefy()
-        {
-            var order = new Order("Anywhere Bike Shop");
-            order.AddLine(new Line(Defy, 1));
-            Assert.AreEqual(ResultStatementOneDefy, order.Receipt());
-        }
+			Assert.AreEqual(0, sut.CalculateTotal());
+		}
 
-        private const string ResultStatementOneDefy = @"Order Receipt for Anywhere Bike Shop
-	1 x Giant Defy 1 = $1,000.00
-Sub-Total: $1,000.00
-Tax: $72.50
-Total: $1,072.50";
+		[TestMethod]
+        public void GivenAnOrderWithNoDiscounts_WhenCalculateLineTotal_ThenShouldMultiplyQuantityTimesPrice()
+		{
+			var sut = new Order(string.Empty);
+			var line = new Line(new Bike(string.Empty, string.Empty, 250), 1);
 
-        [TestMethod]
-        public void ReceiptOneElite()
-        {
-            var order = new Order("Anywhere Bike Shop");
-            order.AddLine(new Line(Elite, 1));
-            Assert.AreEqual(ResultStatementOneElite, order.Receipt());
-        }
+			sut.AddLine(line);
 
-        private const string ResultStatementOneElite = @"Order Receipt for Anywhere Bike Shop
-	1 x Specialized Venge Elite = $2,000.00
-Sub-Total: $2,000.00
-Tax: $145.00
-Total: $2,145.00";
+			Assert.AreEqual(line.CalculateTotal(), sut.CalculateLineTotal(line));
+		}
 
-        [TestMethod]
-        public void ReceiptOneDuraAce()
-        {
-            var order = new Order("Anywhere Bike Shop");
-            order.AddLine(new Line(DuraAce, 1));
-            Assert.AreEqual(ResultStatementOneDuraAce, order.Receipt());
-        }
+		[TestMethod]
+		public void GivenAnOrderWithNoDiscounts_WhenCalculateSubTotal_ThenShouldSumLines()
+		{
+			var sut = new Order(string.Empty);
 
-        private const string ResultStatementOneDuraAce = @"Order Receipt for Anywhere Bike Shop
-	1 x Specialized S-Works Venge Dura-Ace = $5,000.00
-Sub-Total: $5,000.00
-Tax: $362.50
-Total: $5,362.50";
+			sut.AddLine(new Line(new Bike(string.Empty, string.Empty, 250), 1));
+			sut.AddLine(new Line(new Bike(string.Empty, string.Empty, 450), 3));
+			sut.AddLine(new Line(new Bike(string.Empty, string.Empty, 300), 2));
 
-        [TestMethod]
-        public void HtmlReceiptOneDefy()
-        {
-            var order = new Order("Anywhere Bike Shop");
-            order.AddLine(new Line(Defy, 1));
-            Assert.AreEqual(HtmlResultStatementOneDefy, order.HtmlReceipt());
-        }
+			Assert.AreEqual(sut.Lines.Sum(x => sut.CalculateLineTotal(x)), sut.CalculateSubTotal());
+		}
 
-        private const string HtmlResultStatementOneDefy = @"<html><body><h1>Order Receipt for Anywhere Bike Shop</h1><ul><li>1 x Giant Defy 1 = $1,000.00</li></ul><h3>Sub-Total: $1,000.00</h3><h3>Tax: $72.50</h3><h2>Total: $1,072.50</h2></body></html>";
+		[TestMethod]
+		public void GivenAnOrderWithNoDiscounts_WhenCalculateTax_ThenShouldMultiplySubtotalTimesTaxRate()
+		{
+			const double TaxRate = 1.0875d;
 
-        [TestMethod]
-        public void HtmlReceiptOneElite()
-        {
-            var order = new Order("Anywhere Bike Shop");
-            order.AddLine(new Line(Elite, 1));
-            Assert.AreEqual(HtmlResultStatementOneElite, order.HtmlReceipt());
-        }
+			var sut = new Order(string.Empty);
 
-        private const string HtmlResultStatementOneElite = @"<html><body><h1>Order Receipt for Anywhere Bike Shop</h1><ul><li>1 x Specialized Venge Elite = $2,000.00</li></ul><h3>Sub-Total: $2,000.00</h3><h3>Tax: $145.00</h3><h2>Total: $2,145.00</h2></body></html>";
+			sut.AddLine(new Line(new Bike(string.Empty, string.Empty, 250), 1));
+			sut.ApplyTaxRate(TaxRate);
 
-        [TestMethod]
-        public void HtmlReceiptOneDuraAce()
-        {
-            var order = new Order("Anywhere Bike Shop");
-            order.AddLine(new Line(DuraAce, 1));
-            Assert.AreEqual(HtmlResultStatementOneDuraAce, order.HtmlReceipt());
-        }
+			Assert.AreEqual(sut.CalculateSubTotal() * TaxRate, sut.CalculateTax());
+		}
 
-        private const string HtmlResultStatementOneDuraAce = @"<html><body><h1>Order Receipt for Anywhere Bike Shop</h1><ul><li>1 x Specialized S-Works Venge Dura-Ace = $5,000.00</li></ul><h3>Sub-Total: $5,000.00</h3><h3>Tax: $362.50</h3><h2>Total: $5,362.50</h2></body></html>";    
-    }
+		[TestMethod]
+		public void GivenAnOrderWithNoDiscounts_WhenCalculateTotal_ThenShouldAddSubtotalPlusTax()
+		{
+			const double TaxRate = 1.0875d;
+
+			var sut = new Order(string.Empty);
+
+			sut.AddLine(new Line(new Bike(string.Empty, string.Empty, 250), 1));
+
+			Assert.AreEqual(sut.CalculateSubTotal() + sut.CalculateTax(), sut.CalculateTotal());
+		}
+
+		[TestMethod]
+		public void GivenAnOrderWithOneLineDiscount_WhenCalculateLineTotal_ThenDiscountIsApplied()
+		{
+			const double Discount = .8d;
+			const int PriceTheshold = 5000;
+			const int QuantityThreshold = 5;
+
+			var sut = new Order(string.Empty);
+			var bike = new Bike(string.Empty, string.Empty, PriceTheshold);
+			var discount = new LineDiscount("FIRSTDISCOUNT", Discount, QuantityThreshold, PriceTheshold);
+			var line = new Line(bike, QuantityThreshold + 1);
+
+			sut.AddLine(line);
+			sut.ApplyDiscount(discount);
+
+			Assert.AreEqual(discount.Apply(line), sut.CalculateLineTotal(line));
+		}
+
+		[TestMethod]
+		public void GivenAnOrderWithMultipleLineDiscounts_WhenCalculateLineTotal_ThenProperDiscountIsApplied()
+		{
+			const int LargestPriceThreshold = Bike.FiveThousand;
+			const int LargestQuantityThreshold = 20;
+
+			var sut = new Order(string.Empty);
+			var oneThousandDollarsAnd20Bikes = new LineDiscount("ONETHOUSAND_20ORMORE", .9d, LargestQuantityThreshold, Bike.OneThousand);
+			var twoThousandDollarsAnd10Bikes = new LineDiscount("TWOTHOUSAND_10ORMORE", .8d, 10, Bike.TwoThousand);
+			var fiveThousandDollarsAnd5Bikes = new LineDiscount("FIVETHOUSAND_5ORMORE", .8d, 5, LargestPriceThreshold);
+			var line = new Line(new Bike(string.Empty, string.Empty, LargestPriceThreshold), LargestQuantityThreshold + 1);
+
+			sut.AddLine(line);
+			sut.ApplyDiscount(oneThousandDollarsAnd20Bikes);
+			sut.ApplyDiscount(twoThousandDollarsAnd10Bikes);
+			sut.ApplyDiscount(fiveThousandDollarsAnd5Bikes);
+
+			Assert.AreEqual(fiveThousandDollarsAnd5Bikes.Apply(line), sut.CalculateLineTotal(line));
+		}
+
+		[TestMethod]
+		public void GivenAnOrder_WhenTwoDuplicateDiscountsAreApplied_ThenOnlyOneTakesEffect()
+		{
+			const string DiscountCode = "DUPLICATE";
+
+			var sut = new Order(string.Empty);
+
+			sut.ApplyDiscount(new LineDiscount(DiscountCode, 1, 1, 1));
+			sut.ApplyDiscount(new LineDiscount(DiscountCode, 1, 1, 1));
+
+			Assert.AreEqual(1, sut.Discounts.Count);
+		}
+
+		[TestMethod]
+		public void GivenAnOrder_WhenValidTaxRateIsApplied_ThenAllIsWell()
+		{
+			var sut = new Order(string.Empty);
+
+			sut.ApplyTaxRate(1.0875d);
+		}
+
+		[TestMethod, ExpectedException(typeof(ArgumentException))]
+		public void GivenAnOrder_WhenInValidTaxRateIsApplied_ThenExceptionIsThrown()
+		{
+			var sut = new Order(string.Empty);
+
+			sut.ApplyTaxRate(-1);
+		}
+	}
 }
 
 
