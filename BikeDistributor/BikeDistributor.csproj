@@ -39,6 +39,7 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="HtmlReceiptGenerator.cs" />
     <Compile Include="Promotions\LineDiscount.cs" />
     <Compile Include="Promotions\Discount.cs" />
     <Compile Include="Promotions\IDiscountableItem.cs" />
@@ -48,7 +49,9 @@
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="Line.cs" />
     <Compile Include="ReceiptFormats.cs" />
-    <Compile Include="ReceiptGenerator.cs" />
+    <Compile Include="IReceiptGenerator.cs" />
+    <Compile Include="TextReceiptGenerator.cs" />
+    <Compile Include="XmlReceiptGenerator.cs" />
   </ItemGroup>
   <ItemGroup />
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
